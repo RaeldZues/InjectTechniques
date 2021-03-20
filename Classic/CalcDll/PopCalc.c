@@ -5,8 +5,30 @@
 
 DllExport void __stdcall PopCalc(void)
 {
-    // Deprecated but using for simplicity 
-    WinExec("calc", 0);
+	STARTUPINFO startInfo;
+	PROCESS_INFORMATION procInfo;
+
+	ZeroMemory(&startInfo, sizeof(STARTUPINFO));
+	startInfo.cb = sizeof(STARTUPINFO);
+	ZeroMemory(&procInfo, sizeof(PROCESS_INFORMATION));
+
+
+	CreateProcess(
+		"C:\\Windows\\System32\\calc.exe",
+		NULL,
+		NULL,
+		NULL,
+		FALSE,
+		0,
+		NULL,
+		NULL,
+		&startInfo,
+		&procInfo
+	);
+	WaitForSingleObject(procInfo.hProcess, INFINITE);
+	printf("Spawning\n");
+	CloseHandle(procInfo.hProcess);
+	CloseHandle(procInfo.hThread);
 }
 
 
