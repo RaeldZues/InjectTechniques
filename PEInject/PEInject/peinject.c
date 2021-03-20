@@ -79,12 +79,33 @@ PIMAGE_NT_HEADERS GetNtHeader(PVOID imageBase)
 	PIMAGE_DOS_HEADER dosHeader = NULL;
 	if (imageBase == NULL)
 	{
-		imageBase = GetModuleHandle(NULL);
+		return NULL; 
 	}
 	dosHeader = (PIMAGE_DOS_HEADER)imageBase;
 	PIMAGE_NT_HEADERS ntHeader = (PIMAGE_NT_HEADERS)((DWORD_PTR)imageBase + dosHeader->e_lfanew);
 	return ntHeader; 
 }
+
+/// <summary>
+/// Create space with proper permissions and then copy image into it 
+/// </summary>
+/// <param name="ntHeader"></param>
+/// <returns></returns>
+PVOID GetLocalImage(PVOID imageBase, PIMAGE_NT_HEADERS ntHeader)
+{
+	if (imageBase == NULL)
+	{
+		return NULL; 
+	}
+	// ALlocate full priv set of mem for my local image copy 
+	PVOID pLocalImage = VirtualAlloc(NULL, ntHeader->OptionalHeader.SizeOfImage, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+	// Simple error checking for now
+	if (pLocalImage == NULL)
+		return NULL; 
+	CopyMemory(pLocalImage, imageBase, ntHeader->OptionalHeader.SizeOfImage);
+	return pLocalImage;
+}
+
 
 DWORD main()
 {
