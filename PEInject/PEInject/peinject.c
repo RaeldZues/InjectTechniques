@@ -33,7 +33,12 @@ static DWORD GetProcId(const WCHAR* procName)
 	return procId;
 }
 
-
+/// <summary>
+/// Start command prompt
+/// TODO: Update validation checks if you plan to use this for prod.
+/// </summary>
+/// <param name=""></param>
+/// <returns></returns>
 BOOL CommandStart(VOID)
 {
 	STARTUPINFO startInfo;
@@ -60,6 +65,25 @@ BOOL CommandStart(VOID)
 	printf("Spawning\n");
 	CloseHandle(procInfo.hProcess);
 	CloseHandle(procInfo.hThread);
+	return TRUE;
+}
+
+/// <summary>
+/// Get the NT Header of the image based on its base address
+/// ref: http://www.openrce.org/reference_library/files/reference/PE%20Format.pdf
+/// </summary>
+/// <param name="imageBase">Image base address from getmodulehandle func call</param>
+/// <returns>the pointer to the ntHeader of a module provided</returns>
+PIMAGE_NT_HEADERS GetNtHeader(PVOID imageBase)
+{
+	PIMAGE_DOS_HEADER dosHeader = NULL;
+	if (imageBase == NULL)
+	{
+		imageBase = GetModuleHandle(NULL);
+	}
+	dosHeader = (PIMAGE_DOS_HEADER)imageBase;
+	PIMAGE_NT_HEADERS ntHeader = (PIMAGE_NT_HEADERS)((DWORD_PTR)imageBase + dosHeader->e_lfanew);
+	return ntHeader; 
 }
 
 DWORD main()
