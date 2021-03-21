@@ -34,6 +34,17 @@ static DWORD GetProcId(const WCHAR* procName)
 	return procId;
 }
 
+
+DWORD InjectionEntryPoint()
+{
+	CHAR moduleName[128] = "";
+	GetModuleFileNameA(NULL, moduleName, sizeof(moduleName));
+	MessageBoxA(NULL, moduleName, "Obligatory PE Injection", NULL);
+	return 0;
+}
+
+
+
 /// <summary>
 /// Start command prompt
 /// TODO: Update validation checks if you plan to use this for prod.
@@ -198,7 +209,7 @@ HANDLE InjectProc(DWORD PID)
 						targetProc,
 						NULL,
 						0,
-						(LPTHREAD_START_ROUTINE)((DWORD_PTR)CommandStart + ImageBaseOffset),
+						(LPTHREAD_START_ROUTINE)((DWORD_PTR)InjectionEntryPoint + ImageBaseOffset),
 						NULL, 
 						0, 
 						NULL
