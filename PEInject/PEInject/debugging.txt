@@ -1,0 +1,109 @@
+0:007> !analyze -v
+*******************************************************************************
+*                                                                             *
+*                        Exception Analysis                                   *
+*                                                                             *
+*******************************************************************************
+
+
+KEY_VALUES_STRING: 1
+
+    Key  : Analysis.CPU.mSec
+    Value: 1046
+
+    Key  : Analysis.DebugAnalysisManager
+    Value: Create
+
+    Key  : Analysis.Elapsed.mSec
+    Value: 1049
+
+    Key  : Analysis.Init.CPU.mSec
+    Value: 7530
+
+    Key  : Analysis.Init.Elapsed.mSec
+    Value: 177602
+
+    Key  : Analysis.Memory.CommitPeak.Mb
+    Value: 105
+
+    Key  : FailFast.Name
+    Value: GUARD_ICALL_CHECK_FAILURE
+
+    Key  : FailFast.Type
+    Value: 10
+
+    Key  : Timeline.OS.Boot.DeltaSec
+    Value: 129399
+
+    Key  : Timeline.Process.Start.DeltaSec
+    Value: 181
+
+    Key  : WER.OS.Branch
+    Value: vb_release
+
+    Key  : WER.OS.Timestamp
+    Value: 2019-12-06T14:06:00Z
+
+    Key  : WER.OS.Version
+    Value: 10.0.19041.1
+
+    Key  : WER.Process.Version
+    Value: 10.0.19041.746
+
+
+NTGLOBALFLAG:  0
+
+APPLICATION_VERIFIER_FLAGS:  0
+
+EXCEPTION_RECORD:  (.exr -1)
+ExceptionAddress: 00007ff97f1bc57f (ntdll!LdrpICallHandler+0x000000000000000f)
+   ExceptionCode: c0000409 (Security check failure or stack buffer overrun)
+  ExceptionFlags: 00000001
+NumberParameters: 1
+   Parameter[0]: 000000000000000a
+Subcode: 0xa FAST_FAIL_GUARD_ICALL_CHECK_FAILURE 
+
+FAULTING_THREAD:  0000125c
+
+PROCESS_NAME:  notepad.exe
+
+ERROR_CODE: (NTSTATUS) 0xc0000409 - The system detected an overrun of a stack-based buffer in this application. This overrun could potentially allow a malicious user to gain control of this application.
+
+EXCEPTION_CODE_STR:  c0000409
+
+EXCEPTION_PARAMETER1:  000000000000000a
+
+STACK_TEXT:  
+000000b9`f5efeb78 00007ff9`7f1d1f6f     : 00007ff9`7f1bc570 00000000`00000000 00000000`00000000 00000000`00000000 : ntdll!LdrpICallHandler+0xf
+000000b9`f5efeb80 00007ff9`7f181454     : 00000000`00000000 000000b9`f5eff0f0 000000b9`f5eff7b0 00000000`00000000 : ntdll!RtlpExecuteHandlerForException+0xf
+000000b9`f5efebb0 00007ff9`7f1d0a9e     : 00000000`00000000 00000000`00000003 00000000`00000000 00007ff9`7aabba8d : ntdll!RtlDispatchException+0x244
+000000b9`f5eff2c0 00007ff9`7f1bc63e     : 00007ff9`7ec07034 00000000`00000000 00000000`00000000 00000000`00000000 : ntdll!KiUserExceptionDispatch+0x2e
+000000b9`f5effa68 00007ff9`7ec07034     : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : ntdll!LdrpDispatchUserCallTarget+0xe
+000000b9`f5effa70 00007ff9`7f182651     : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : KERNEL32!BaseThreadInitThunk+0x14
+000000b9`f5effaa0 00000000`00000000     : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : ntdll!RtlUserThreadStart+0x21
+
+
+STACK_COMMAND:  ~7s ; .cxr ; kb
+
+SYMBOL_NAME:  ntdll!LdrpICallHandler+f
+
+MODULE_NAME: ntdll
+
+IMAGE_NAME:  ntdll.dll
+
+FAILURE_BUCKET_ID:  FAIL_FAST_GUARD_ICALL_CHECK_FAILURE_c0000409_ntdll.dll!LdrpICallHandler
+
+OS_VERSION:  10.0.19041.1
+
+BUILDLAB_STR:  vb_release
+
+OSPLATFORM_TYPE:  x64
+
+OSNAME:  Windows 10
+
+IMAGE_VERSION:  10.0.19041.844
+
+FAILURE_ID_HASH:  {7bdb7f69-4077-8291-692c-b5f68062135e}
+
+Followup:     MachineOwner
+---------
