@@ -214,6 +214,9 @@ HANDLE InjectProc(DWORD PID)
 						0, 
 						NULL
 					);
+					// Failing on execution in remote thread
+					// ref for potential workaround later
+					// ref: https://www.deepinstinct.com/2019/07/24/inject-me-x64-injection-less-code-injection/
 					if (rThread == NULL)
 					{
 						printf("Last Error: %d\n", GetLastError());
